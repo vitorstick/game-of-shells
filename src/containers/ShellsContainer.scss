@@ -1,0 +1,26 @@
+.shells-container {
+  &__shells {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    & > * {
+      margin: 15px;
+    }
+  }
+
+  &__start {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+  }
+}
