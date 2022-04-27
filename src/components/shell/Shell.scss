@@ -8,9 +8,11 @@
   &__container {
     display: flex;
     width: 40px;
-    height: 40px;
+    height: 70px;
     background: yellow;
     border-radius: 30%;
+    border-bottom-left-radius: 5%;
+    border-bottom-right-radius: 5%;
 
     &.disabled {
       background: #ccc;
@@ -21,7 +23,7 @@
     display: flex;
     width: 20px;
     height: 20px;
-    padding-top: 25px;
+    padding-top: 15px;
     &--has {
       background: green;
       width: 100%;

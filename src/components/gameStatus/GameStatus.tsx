@@ -26,18 +26,46 @@ const GameStatus: FC<Props> = (props) => {
 
   const actionsSwitch = (): JSX.Element => {
     switch (gameStatus) {
-      case GameStatusEnum.ONGOING:
       case GameStatusEnum.LOST:
+        return (
+          <button className='action__button' onClick={shuffle}>
+            TRY AGAIN
+          </button>
+        );
       case GameStatusEnum.WON:
-        return <button onClick={shuffle}>RESTART</button>;
+        return (
+          <button className='action__button' onClick={shuffle}>
+            RESTART
+          </button>
+        );
       case GameStatusEnum.START:
+        return (
+          <button className='action__button' onClick={start}>
+            START
+          </button>
+        );
+      case GameStatusEnum.ONGOING:
       default:
-        return <button onClick={start}>START</button>;
+        return <div></div>;
+    }
+  };
+
+  const labelSwitch = (): JSX.Element => {
+    switch (gameStatus) {
+      case GameStatusEnum.WON:
+        return <div className='label__message'>You Won</div>;
+      case GameStatusEnum.LOST:
+        return <div className='label__message'>You Lost</div>;
+      case GameStatusEnum.START:
+      case GameStatusEnum.ONGOING:
+      default:
+        return <div className='label__message'></div>;
     }
   };
 
   return (
     <div className='game-status'>
+      <div className='game-status__label'>{labelSwitch()}</div>
       <div className='game-status__actions'>{actionsSwitch()}</div>
     </div>
   );

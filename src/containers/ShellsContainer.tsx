@@ -26,17 +26,15 @@ const ShellsContainer: FC = () => {
   ];
 
   const [shells, setShells]: [ShellInterface[], any] = useState(initialShells);
-  const [loaded, setLoaded]: [boolean, any] = useState(false);
-  const [gameStatus, setGameStatus]: [GameStatusEnum, any] = useState(
-    GameStatusEnum.START
-  );
+  const [gameStatus, setGameStatus]: [GameStatusEnum | null, any] =
+    useState(null);
 
   useEffect(() => {
     setGameStatus(GameStatusEnum.START);
   }, []);
 
   const start = (): void => {
-    setLoaded(true);
+    setGameStatus(GameStatusEnum.ONGOING);
     shuffleShells();
   };
 
@@ -44,13 +42,15 @@ const ShellsContainer: FC = () => {
     const newShells = shells.map((shell: ShellInterface) => {
       if (shell.id === id) {
         shell.isOpen = true;
+
+        setStatus(shell);
       }
       return shell;
     });
     setShells([...newShells]);
   };
 
-  const shuffleShells = () => {
+  const shuffleShells = (): void => {
     const chosenShells = getRandomInt(0, 2);
     const newShells = shells.map((shell: ShellInterface, index: number) => {
       shell.isOpen = false;
@@ -61,28 +61,37 @@ const ShellsContainer: FC = () => {
       return shell;
     });
     setShells([...newShells]);
+    setGameStatus(GameStatusEnum.ONGOING);
   };
 
-  const getRandomInt = (min: number, max: number) => {
+  const getRandomInt = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  const setStatus = (shell: ShellInterface) => {
+    // only if is ongoing
+    if (gameStatus === GameStatusEnum.ONGOING) {
+      if (shell.hasBall) {
+        setGameStatus(GameStatusEnum.WON);
+      } else {
+        setGameStatus(GameStatusEnum.LOST);
+      }
+    }
   };
 
   return (
     <div className='shells-container'>
-      {loaded ? (
-        <Fragment>
-          <div className='shells-container__shells'>
-            {shells.map((shell) => (
-              <Fragment key={shell.id}>
-                <Shell shell={shell} onOpenShell={openShell} />
-              </Fragment>
-            ))}
-          </div>
-          <div className='shells-container__actions'>
-            <button onClick={() => shuffleShells()}>RE-START</button>
-          </div>
-        </Fragment>
-      ) : (
+      {gameStatus !== GameStatusEnum.START && (
+        <div className='shells-container__shells'>
+          {shells.map((shell) => (
+            <Fragment key={shell.id}>
+              <Shell shell={shell} onOpenShell={openShell} />
+            </Fragment>
+          ))}
+        </div>
+      )}
+
+      <Fragment>
         <div className='shells-container__status'>
           <GameStatus
             status={gameStatus}
@@ -90,7 +99,7 @@ const ShellsContainer: FC = () => {
             onShuffle={shuffleShells}
           />
         </div>
-      )}
+      </Fragment>
     </div>
   );
 };
