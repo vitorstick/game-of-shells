@@ -1,7 +1,9 @@
-import React, { FC, Fragment, useState } from 'react';
+import React, { FC, Fragment, useEffect, useState } from 'react';
 import './ShellsContainer.scss';
-import Shell from '../components/Shell';
 import { ShellInterface } from '../models/shell.interface';
+import Shell from '../components/shell/Shell';
+import { GameStatusEnum } from '../models/game-status.enum';
+import GameStatus from '../components/gameStatus/GameStatus';
 
 const ShellsContainer: FC = () => {
   // INITIAL STATE
@@ -25,6 +27,13 @@ const ShellsContainer: FC = () => {
 
   const [shells, setShells]: [ShellInterface[], any] = useState(initialShells);
   const [loaded, setLoaded]: [boolean, any] = useState(false);
+  const [gameStatus, setGameStatus]: [GameStatusEnum, any] = useState(
+    GameStatusEnum.START
+  );
+
+  useEffect(() => {
+    setGameStatus(GameStatusEnum.START);
+  }, []);
 
   const start = (): void => {
     setLoaded(true);
@@ -42,7 +51,6 @@ const ShellsContainer: FC = () => {
   };
 
   const shuffleShells = () => {
-    console.log('shuffleShells');
     const chosenShells = getRandomInt(0, 2);
     const newShells = shells.map((shell: ShellInterface, index: number) => {
       shell.isOpen = false;
@@ -75,8 +83,12 @@ const ShellsContainer: FC = () => {
           </div>
         </Fragment>
       ) : (
-        <div className='shells-container__start'>
-          <button onClick={start}>START</button>
+        <div className='shells-container__status'>
+          <GameStatus
+            status={gameStatus}
+            onStart={start}
+            onShuffle={shuffleShells}
+          />
         </div>
       )}
     </div>

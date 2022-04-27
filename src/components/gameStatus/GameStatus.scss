@@ -1,0 +1,12 @@
+.game-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  &__actions {
+    button {
+      padding: 15px 10px;
+    }
+  }
+}

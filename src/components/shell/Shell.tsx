@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { ShellInterface } from '../models/shell.interface';
+import { ShellInterface } from '../../models/shell.interface';
 import './Shell.scss';
 
 interface Props {
